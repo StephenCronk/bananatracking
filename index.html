@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍌 Banana Boi Delivery Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 50%, #f9ca24 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero {
+            text-align: center;
+            width: 100%;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 6vw, 4rem);
+            color: #2d3436;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 800;
+        }
+
+        .emoji {
+            font-size: clamp(3rem, 8vw, 6rem);
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: clamp(1rem, 4vw, 4rem);
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .time-unit {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: clamp(1.5rem, 4vw, 3rem);
+            min-width: clamp(120px, 20vw, 200px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .time-unit:hover {
+            transform: translateY(-10px);
+        }
+
+        .number {
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 900;
+            color: #6c5ce7;
+            line-height: 1;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+            display: block;
+        }
+
+        .label {
+            font-size: clamp(1rem, 2.5vw, 2rem);
+            color: #2d3436;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            color: #2d3436;
+            font-weight: 600;
+            margin-top: 2rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .countdown {
+                gap: 1rem;
+            }
+            
+            .time-unit {
+                min-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Next <span class="emoji">🍌</span> Boi Delivery</h1>
+        
+        <div class="countdown">
+            <div class="time-unit">
+                <span class="number" id="days">0</span>
+                <div class="label">Days</div>
+            </div>
+            <div class="time-unit">
+                <span class="number" id="hours">0</span>
+                <div class="label">Hours</div>
+            </div>
+            <div class="time-unit">
+                <span class="number" id="minutes">0</span>
+                <div class="label">Minutes</div>
+            </div>
+            <div class="time-unit">
+                <span class="number" id="seconds">0</span>
+                <div class="label">Seconds</div>
+            </div>
+        </div>
+
+        <div class="subtitle" id="deliveryDate"></div>
+    </div>
+
+    <script>
+        let targetDate;
+
+        // Fetch the delivery date from the text file
+        fetch('nextdelivery.txt')
+            .then(response => response.text())
+            .then(dateString => {
+                targetDate = new Date(dateString.trim());
+                updateDeliveryDate();
+                updateCountdown();
+                setInterval(updateCountdown, 1000);
+            })
+            .catch(error => {
+                console.error('Error loading delivery date:', error);
+                // Fallback date
+                targetDate = new Date('2025-12-21T08:00:00');
+                updateDeliveryDate();
+                updateCountdown();
+                setInterval(updateCountdown, 1000);
+            });
+
+        function updateDeliveryDate() {
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit'
+            };
+            document.getElementById('deliveryDate').textContent = 
+                targetDate.toLocaleDateString('en-US', options);
+        }
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById('days').textContent = '0';
+                document.getElementById('hours').textContent = '0';
+                document.getElementById('minutes').textContent = '0';
+                document.getElementById('seconds').textContent = '0';
+                document.querySelector('.subtitle').textContent = '🍌 Delivery Time! 🍌';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+        }
+    </script>
+</body>
+</html>
