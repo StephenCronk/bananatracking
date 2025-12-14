@@ -95,6 +95,122 @@
             opacity: 0.8;
         }
 
+        .status-tracker {
+            margin-top: 3rem;
+            padding: 2rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .status-title {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            color: #2d3436;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            padding: 0 1rem;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 25px;
+            left: 1rem;
+            right: 1rem;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            z-index: 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6c5ce7, #a29bfe);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(108, 92, 231, 0.5);
+        }
+
+        .status-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+            position: relative;
+        }
+
+        .status-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-step.active .status-circle {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            border-color: #6c5ce7;
+            transform: scale(1.2);
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+        }
+
+        .status-step.completed .status-circle {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            border-color: #00b894;
+        }
+
+        .status-label {
+            margin-top: 1rem;
+            font-size: clamp(0.7rem, 1.5vw, 1rem);
+            color: #2d3436;
+            font-weight: 600;
+            text-align: center;
+            max-width: 100px;
+            line-height: 1.3;
+        }
+
+        .status-step.active .status-label {
+            color: #6c5ce7;
+            font-weight: 700;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .progress-container {
+                padding: 0 0.5rem;
+            }
+            
+            .status-circle {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .status-label {
+                font-size: 0.65rem;
+                max-width: 70px;
+            }
+            
+            .progress-line {
+                left: 0.5rem;
+                right: 0.5rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .countdown {
                 gap: 1rem;
@@ -129,7 +245,34 @@
             </div>
         </div>
 
-        <div class="subtitle" id="deliveryDate"></div>
+        <div class="status-tracker">
+            <div class="status-title">🍌 Banana Delivery Status</div>
+            <div class="progress-container">
+                <div class="progress-line">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="status-step" id="step1">
+                    <div class="status-circle">📝</div>
+                    <div class="status-label">Bunch Ordered</div>
+                </div>
+                <div class="status-step" id="step2">
+                    <div class="status-circle">🌱</div>
+                    <div class="status-label">Being Picked</div>
+                </div>
+                <div class="status-step" id="step3">
+                    <div class="status-circle">🍌</div>
+                    <div class="status-label">Ripening</div>
+                </div>
+                <div class="status-step" id="step4">
+                    <div class="status-circle">📦</div>
+                    <div class="status-label">Bunch Packed</div>
+                </div>
+                <div class="status-step" id="step5">
+                    <div class="status-circle">🚚</div>
+                    <div class="status-label">Out for Delivery</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -140,7 +283,6 @@
             .then(response => response.text())
             .then(dateString => {
                 targetDate = new Date(dateString.trim());
-                updateDeliveryDate();
                 updateCountdown();
                 setInterval(updateCountdown, 1000);
             })
@@ -148,22 +290,54 @@
                 console.error('Error loading delivery date:', error);
                 // Fallback date
                 targetDate = new Date('2025-12-21T08:00:00');
-                updateDeliveryDate();
                 updateCountdown();
                 setInterval(updateCountdown, 1000);
             });
 
-        function updateDeliveryDate() {
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: 'numeric',
-                minute: '2-digit'
-            };
-            document.getElementById('deliveryDate').textContent = 
-                targetDate.toLocaleDateString('en-US', options);
+        function updateStatus(daysRemaining) {
+            // Calculate status based on 2-week (14 days) timeframe
+            const steps = document.querySelectorAll('.status-step');
+            const progressFill = document.getElementById('progressFill');
+            
+            let currentStep = 0;
+            let progressPercent = 0;
+            
+            if (daysRemaining > 14) {
+                // Over 2 weeks: stuck at "Being Picked"
+                currentStep = 2;
+                progressPercent = 25;
+            } else if (daysRemaining > 10) {
+                // 10-14 days: Being Picked
+                currentStep = 2;
+                progressPercent = 25 + ((14 - daysRemaining) / 4) * 25;
+            } else if (daysRemaining > 7) {
+                // 7-10 days: Ripening
+                currentStep = 3;
+                progressPercent = 50 + ((10 - daysRemaining) / 3) * 25;
+            } else if (daysRemaining > 1) {
+                // 2-7 days: Bunch Packed
+                currentStep = 4;
+                progressPercent = 75 + ((7 - daysRemaining) / 6) * 20;
+            } else {
+                // Day before or day of: Out for Delivery
+                currentStep = 5;
+                progressPercent = 100;
+            }
+            
+            // Update the visual status
+            steps.forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 < currentStep) {
+                    step.classList.add('completed');
+                } else if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                }
+            });
+            
+            // Always mark first step as completed
+            steps[0].classList.add('completed');
+            
+            progressFill.style.width = progressPercent + '%';
         }
 
         function updateCountdown() {
@@ -175,7 +349,7 @@
                 document.getElementById('hours').textContent = '0';
                 document.getElementById('minutes').textContent = '0';
                 document.getElementById('seconds').textContent = '0';
-                document.querySelector('.subtitle').textContent = '🍌 Delivery Time! 🍌';
+                updateStatus(0);
                 return;
             }
 
@@ -188,6 +362,8 @@
             document.getElementById('hours').textContent = hours;
             document.getElementById('minutes').textContent = minutes;
             document.getElementById('seconds').textContent = seconds;
+            
+            updateStatus(days);
         }
     </script>
 </body>
