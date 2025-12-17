@@ -1,0 +1,43 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffeaa7;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#fdcb6e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f9ca24;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Banana Pattern Background -->
+  <text x="60" y="60" font-size="40" opacity="0.1" fill="#000">🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌</text>
+  <text x="60" y="120" font-size="40" opacity="0.1" fill="#000">🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌</text>
+  <text x="60" y="180" font-size="40" opacity="0.1" fill="#000">🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌</text>
+  <text x="60" y="240" font-size="40" opacity="0.1" fill="#000">🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌</text>
+  <text x="60" y="300" font-size="40" opacity="0.1" fill="#000">🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌</text>
+  <text x="60" y="360" font-size="40" opacity="0.1" fill="#000">🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌</text>
+  <text x="60" y="420" font-size="40" opacity="0.1" fill="#000">🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌</text>
+  <text x="60" y="480" font-size="40" opacity="0.1" fill="#000">🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌</text>
+  <text x="60" y="540" font-size="40" opacity="0.1" fill="#000">🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌</text>
+  <text x="60" y="600" font-size="40" opacity="0.1" fill="#000">🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌 🍌</text>
+  
+  <!-- Main Content Box -->
+  <rect x="150" y="150" width="900" height="330" rx="20" fill="rgba(255, 255, 255, 0.3)" stroke="rgba(255, 255, 255, 0.5)" stroke-width="3"/>
+  
+  <!-- Big Banana Emoji -->
+  <text x="600" y="240" font-size="120" text-anchor="middle" fill="#000">🍌</text>
+  
+  <!-- Title -->
+  <text x="600" y="350" font-size="56" font-weight="800" text-anchor="middle" fill="#2d3436" font-family="Arial, sans-serif">Banana Boi Delivery</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="410" font-size="32" font-weight="600" text-anchor="middle" fill="#2d3436" font-family="Arial, sans-serif" opacity="0.8">Live Countdown Tracker</text>
+  
+  <!-- Status Icons -->
+  <text x="250" y="450" font-size="30">📝</text>
+  <text x="380" y="450" font-size="30">🌱</text>
+  <text x="510" y="450" font-size="30">🍌</text>
+  <text x="640" y="450" font-size="30">📦</text>
+  <text x="770" y="450" font-size="30">🚚</text>
+</svg>
